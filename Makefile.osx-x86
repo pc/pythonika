@@ -1,0 +1,46 @@
+
+# Set the paths according to your MathLink Developer Kit location.
+# (The paths should not contain whitespaces)
+
+MLINKDIR = ./mathematica/AddOns/MathLink/DeveloperKit
+
+SYS = MacOSX-x86
+CADDSDIR = ${MLINKDIR}/${SYS}/CompilerAdditions
+
+INCDIR = ${CADDSDIR}
+LIBDIR = ${CADDSDIR}
+
+# Path to the Python includes (modify according to Python version)
+#
+#PYTHONFRAMEWORKDIR = /System/Library/Frameworks/
+#PYTHONINC = /System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3/
+#OPTS = -DPYTHON23
+
+# You may need something like these for Python2.5
+PYTHONFRAMEWORKDIR = /Library/Frameworks/Python.framework/Versions/2.5
+PYTHONINC = /Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
+OPTS = -DPYTHON25
+ 
+PYTHONIKA = Pythonika
+INCLUDES = -I${INCDIR} -I${PYTHONINC}
+LIBS = -L${LIBDIR} -lML -F${PYTHONFRAMEWORKDIR} -framework Python
+MPREP = "${CADDSDIR}/mprep"
+MCC = "${CADDSDIR}/mcc"
+
+
+all : Pythonika
+
+
+Pythonika: ${PYTHONIKA}.o ${PYTHONIKA}tm.o
+	${CC} ${INCLUDES} ${PYTHONIKA}.o ${PYTHONIKA}tm.o ${LIBS} -o ${PYTHONIKA}
+
+
+${PYTHONIKA}tm.o: ${PYTHONIKA}.tm
+	${MPREP} ${PYTHONIKA}.tm -o ${PYTHONIKA}tm.c
+	${CC} -c ${PYTHONIKA}tm.c ${INCLUDES}
+
+${PYTHONIKA}.o: ${PYTHONIKA}.c
+	${CC} ${OPTS} -c ${PYTHONIKA}.c ${INCLUDES}
+
+clean :
+	rm -f ${PYTHONIKA}tm.* ${PYTHONIKA}.o ${PYTHONIKA}

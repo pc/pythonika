@@ -1,0 +1,43 @@
+
+# Path of the MathLink directory. Modify it to point to the location
+# containing the 'bin' and 'include' locations.
+#
+# Note: "CL" seems not to like paths containing whitespace therefore
+# it's probably a good idea to copy the folder containing them to the
+# Pythonika directory.
+#
+MATHLINKDIR = mldev32
+
+#MATHLINKDIR = "C:\Program Files\Wolfram Research\Mathematica\5.2\AddOns\MathLink\DeveloperKit\Windows\CompilerAdditions\mldev32\"
+
+
+# Path to the Python installation
+#
+PYTHONDIR = c:\python25
+
+# Filename of the Python library, change accoring to version.
+#
+PYTHONLIB = python25.lib
+
+# Set according to the Python version
+#PYTHONDEF = PYTHON23
+#PYTHONDEF = PYTHON24
+PYTHONDEF = PYTHON25
+
+
+CFLAGS = /c /DWIN32 /D_WINDOWS /D$(PYTHONDEF) /W3 /Z7 /Ot
+LINKFLAGS = /SUBSYSTEM:CONSOLE /PDB:NONE /INCREMENTAL:no kernel32.lib user32.lib gdi32.lib
+
+
+INCLUDES = /I$(PYTHONDIR)\include /I$(MATHLINKDIR)\include
+MPREP = $(MATHLINKDIR)\bin\mprep.exe
+LIBS = $(PYTHONDIR)\libs\$(PYTHONLIB) $(MATHLINKDIR)\lib\ml32i2m.lib
+
+all:
+    "$(MPREP)" Pythonika.tm -o Pythonikatm.c
+    CL Pythonika.c Pythonikatm.c $(INCLUDES) $(CFLAGS)
+    LINK Pythonika.obj Pythonikatm.obj /OUT:Pythonika.exe $(LIBS) $(LINKFLAGS)
+
+
+clean:
+    del *.obj Pythonikatm.c Pythonika.exe

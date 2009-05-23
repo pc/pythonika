@@ -1,0 +1,40 @@
+
+# Set the paths according to your MathLink Developer Kit location.
+# (The paths should not contain whitespaces)
+
+MLINKDIR = ./
+
+SYS = Linux
+CADDSDIR = ${MLINKDIR}/${SYS}/CompilerAdditions
+
+INCDIR = ${CADDSDIR}
+LIBDIR = ${CADDSDIR}
+
+# Path to the Python includes (modify according to Python version)
+#
+PYTHONINC = /usr/include/python2.4/
+
+
+PYTHONIKA = Pythonika
+INCLUDES = -I${INCDIR} -I${PYTHONINC}
+LIBS = -L${LIBDIR} -lML -lpython2.4
+MPREP = "${CADDSDIR}/mprep"
+MCC = "${CADDSDIR}/mcc"
+
+
+all : Pythonika
+
+
+Pythonika: ${PYTHONIKA}.o ${PYTHONIKA}tm.o
+	${CC} ${INCLUDES} ${PYTHONIKA}.o ${PYTHONIKA}tm.o ${LIBS} -o ${PYTHONIKA}
+
+
+${PYTHONIKA}tm.o: ${PYTHONIKA}.tm
+	${MPREP} ${PYTHONIKA}.tm -o ${PYTHONIKA}tm.c
+	${CC} -c ${PYTHONIKA}tm.c ${INCLUDES}
+
+${PYTHONIKA}.o: ${PYTHONIKA}.c
+	${CC} -c ${PYTHONIKA}.c ${INCLUDES}
+
+clean :
+	rm -f ${PYTHONIKA}tm.* ${PYTHONIKA}.o ${PYTHONIKA}
