@@ -2,13 +2,13 @@
 # Set the paths according to your MathLink Developer Kit location.
 # (The paths should not contain whitespaces)
 
-MLINKDIR = ./mathematica/AddOns/MathLink/DeveloperKit
+MLINKDIR = /Applications/Mathematica.app/SystemFiles/Links/MathLink/DeveloperKit
 
-SYS = Darwin
-CADDSDIR = ${MLINKDIR}/${SYS}/CompilerAdditions
+CADDSDIR = ${MLINKDIR}/CompilerAdditions
 
 INCDIR = ${CADDSDIR}
 LIBDIR = ${CADDSDIR}
+CC=g++
 
 # Path to the Python includes (modify according to Python version)
 #
@@ -17,13 +17,13 @@ LIBDIR = ${CADDSDIR}
 #OPTS = -DPYTHON23
 
 # You may need something like these for Python2.5
-PYTHONFRAMEWORKDIR = /Library/Frameworks/Python.framework/Versions/2.5
-PYTHONINC = /Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
+PYTHONFRAMEWORKDIR = /System/Library/Frameworks/Python.framework/Versions/2.5
+PYTHONINC = /System/Library/Frameworks/Python.framework/Versions/2.5/include/python2.5
 OPTS = -DPYTHON25
  
 PYTHONIKA = Pythonika
-INCLUDES = -I${INCDIR} -I${PYTHONINC}
-LIBS = -L${LIBDIR} -lML -F${PYTHONFRAMEWORKDIR} -framework Python
+INCLUDES = -I${INCDIR} -I${PYTHONINC} 
+LIBS = -L${LIBDIR} -lMLi3 -F${PYTHONFRAMEWORKDIR} -framework Python
 MPREP = "${CADDSDIR}/mprep"
 MCC = "${CADDSDIR}/mcc"
 
